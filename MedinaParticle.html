@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+
+ <title>Particle System</title>
+ <head></head>
+ <meta charset="utf-8">
+ <style>
+
+
+ body{
+ 	background: linear-gradient(to bottom, rgba(80,164,242,1) 0%, rgba(31,106,181,1) 75%, rgba(10,72,138,1) 100%);
+ }
+
+p{
+	background:green;
+	text-align:center;
+	font-size:28px;
+
+}
+
+canvas {
+ border: 1px solid black;
+}
+
+input{background-color:#cc3333;
+
+	     
+}
+
+
+</style>
+ <script>
+ var canvas;
+ var context;
+ var particles;
+ var timer;
+ var timerRestart;
+ 
+ var colors = [
+          "red",
+          "blue",
+          "green",
+          "yellow",
+          "white",
+          "pink",
+          "orange",
+          "magenta"
+         
+	 ];
+	 
+
+
+
+
+ function makeParticles() {
+	//create an array of particles for our animation
+	particles = [];
+	for(var i = 0; i < 30; i++)
+	{
+		particles.push(new Particle());
+	}
+ }
+
+ function degreesToRadians(degrees) {
+	 //converts from degrees to radians and returns
+	 return (degrees * Math.PI)/180;
+ }
+ function Particle()
+ {
+	 //the constructor for a single particle, with random starting x+y, velocity, color, and radius
+	 //this.x = Math.random()*canvas.width;
+	 //this.y = Math.random()*canvas.height;
+	 
+//for this one to trigger on the mouse location all i had to do is add event.clientX and Y
+	 this.x = event.clientX;
+	 this.y = event.clientY;
+	 this.vx = Math.random()*10-5;
+	 this.vy = Math.random()*10-5;
+	this.color = colors[Math.floor(Math.random()*colors.length)];
+
+ }
+
+
+ function moveParticles() {
+	 //partially clear the screen to fade previous circles, and draw a new particle at each new coordinate
+	 context.globalCompositeOperation = "source-over";
+	 context.fillStyle = "rgba(0, 0, 0, 0.1)";
+	 context.fillRect(0, 0, canvas.width, canvas.height);
+	 context.globalCompositeOperation = "lighter";
+	 for(var i = 0; i < particles.length; i++)
+	 {
+		 var p = particles[i];
+		 context.beginPath();
+		 context.arc(p.x, p.y, p.radius, 0, degreesToRadians(360), true);
+		 context.fillStyle = p.color;
+		 context.fill();
+		 p.x += p.vx;
+		 p.y += p.vy;
+		 if(p.x < -1000) p.x = canvas.width+1000;
+		 if(p.y < -1000) p.y = canvas.height+1000;
+		 if(p.x > canvas.width+1000) p.x = -1000;
+		 if(p.y > canvas.height+1000) p.y = -1000;
+		 p.radius = 2;
+	 }
+ }
+ /*function clearScreen(color) {
+	 //clears the screen and fills with the color of choice
+	 context.clearRect(0, 0, canvas.width, canvas.height);
+	 context.fillStyle = color;
+	 context.fillRect(0, 0, canvas.width, canvas.height);
+ }
+*/
+
+
+function begining (color){
+
+
+	context.clearRect(0, 0, canvas.width, canvas.height);
+		context.fillStyle = gradient;
+		context.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+
+ window.onload = function() {
+
+
+
+     canvas = document.getElementById('canvas');
+
+
+	 context = canvas.getContext('2d');
+	 
+	 window.addEventListener('resize', resizeCanvas, false);
+     window.addEventListener('orientationchange', resizeCanvas, false);
+    
+
+     resizeCanvas();
+     begining();
+    
+     //context.textBaseline="middle";
+     
+	 TextSmallToBig();
+	 
+
+
+	 //var startButton = document.getElementById("startButton");
+	    startButton.onclick = init;
+
+}
+
+//added event listeners to create fire works on mouse click
+ function init (){
+    
+
+     canvas.onclick = function(event) {
+			makeParticles(event.clientX, event.clientY);
+		};
+	 
+	 timer = setInterval(moveParticles, 20);
+	 timerRestart = setInterval(makeParticles, 5000);
+      displayMessege();
+
+ }
+
+
+//addded function to resize the canvas depending on the screen
+ function resizeCanvas() {
+        canvas.width = window.innerWidth- 20;
+        canvas.height = window.innerHeight- 120;
+        
+
+    }
+
+
+
+
+function displayMessege() {
+  canvas = document.getElementById("canvas");
+ 
+  ctx = canvas.getContext("2d");
+  ctx.font = "15px Comic Sans MS";
+  ctx.fillStyle= "rgba(255,255,204,0.02)";
+  ctx.textAlign= "center";
+  ctx.fillText("Click Here",canvas.width/2, canvas.height/2 + 100);
+  setTimeout(displayMessege,0)
+
+}
+
+/*
+function bouncingText(){
+     
+     
+var c = document.getElementById("canvas");
+var ctx = c.getContext("2d");
+
+ 	var step = 10;
+ 	var steps = 50;
+ 	var delay = 20;
+ 	var canvas;
+ 	var ctx;
+/*
+ctx.font = "20px Georgia";
+ctx.fillStyle= "red";
+ctx.fillText("hola!", 30, 40);
+
+ctx.font = "30px Verdana";
+
+// Create gradient
+
+// Fill with gradient
+ctx.fillStyle = gradient;
+ctx.fillText("Welcome!", 10, 90);
+}
+*/
+
+
+var step = 5;
+var steps = 80;
+var delay = 30;
+var canvas;
+var ctx;
+var gradient;
+
+
+ function TextSmallToBig() {
+
+            step++;
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.save();
+  
+            context.font = step + "pt Verdana";
+            var gradient = context.createLinearGradient(0, 0, canvas.width, 0);
+				gradient.addColorStop("0.5", "green");
+				gradient.addColorStop("0", "blue");
+				gradient.addColorStop("1.0", "red");
+            context.fillStyle= gradient;
+            context.textAlign= "center";
+            context.fillText("Welcome", canvas.width/2, canvas.height/2);
+            context.restore();
+            if (step < steps)
+                var t = setTimeout('TextSmallToBig()', 20);
+   context.font = "20px Georgia";
+   context.fillText("Click red button!", canvas.width/16,canvas.height/1);
+   context.fillStyle="white";
+
+            context.width= canvas.width;
+            context.height= canvas.height;
+        }
+
+
+
+</script>
+
+<body>
+	<canvas id="canvas" width="1280" height="720"></canvas>
+
+ <form>
+ 
+ 
+ <input type="button" id="startButton"  value="    Start    ">
+
+ </form>
+
+ <p> Fireworks Fiesta</p>
+
+
+
+</body>
+</html>
