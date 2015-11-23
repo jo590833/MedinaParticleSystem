@@ -1,2 +1,0 @@
-# MedinaParticleSystem
-Canvas Animation
