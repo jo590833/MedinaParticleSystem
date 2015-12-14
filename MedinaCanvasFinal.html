@@ -1,0 +1,974 @@
+<!doctype html>
+<html lang="en">
+
+ <title>Particle System</title>
+ <head></head>
+ <meta charset="utf-8">
+ <style>
+
+
+ body{
+ 	background:  linear-gradient(to bottom, rgba(255,45,8,1) 0%, rgba(252,244,246,1) 12%, rgba(252,244,246,1) 15%, rgba(5,74,250,1) 31%, rgba(250,247,247,1) 38%, rgba(250,5,74,1) 45%, rgba(247,247,247,1) 61%, rgba(247,247,247,1) 67%, rgba(12,51,245,1) 79%, rgba(250,247,247,1) 86%, rgba(245,20,12,1) 99%, rgba(245,20,12,1) 100%);
+ }
+
+p{
+	background:  linear-gradient(to right, rgba(10,98,250,1) 0%, rgba(85,250,20,1) 39%, rgba(98,250,75,1) 62%, rgba(25,62,250,1) 100%);
+	text-align:center;
+	color:red;
+	font-size:28px;
+
+}
+
+canvas {
+ border: 1px solid black;
+ background:#0099ff;
+}
+
+input{background-color:blue;
+      color:white;
+      border-color:white;
+      	     
+}
+
+
+</style>
+ <script>
+ var canvas;
+ var context;
+ var particles;
+ var timer;
+ var timerRestart;
+ ///////////////////
+
+var step = 5;
+var steps = 80;
+var delay = 30;
+var canvas;
+var ctx;
+var gradient;
+var ctc;
+////////////////////////////////////////////////////////////
+var colorsMexico = [
+         
+          "white",
+          "red",
+          "red",
+          "green",
+          "green"
+
+	 ];
+  
+
+
+function makeParticlesMexico() {
+  //create an array of particles for our animation
+  particles = [];
+  for(var i = 0; i < 30; i++)
+  {
+    particles.push(new ParticleMexico());
+      
+  }
+
+   }
+
+
+ function ParticleMexico()
+ {
+
+   //the constructor for a single particle, with random starting x+y, velocity, color, and radius
+   //this.x = Math.random()*canvas.width;
+   //this.y = Math.random()*canvas.height;
+   
+//for this one to trigger on the mouse location all i had to do is add event.clientX and Y
+   this.x = event.clientX;
+   this.y = event.clientY;
+   this.vx = Math.random()*10-5;
+   this.vy = Math.random()*10-5;
+  this.color = colorsMexico[Math.floor(Math.random()*colorsMexico.length)];
+
+displayMessegeMexico();
+
+
+ }
+
+ function moveParticlesMexico() {
+   //partially clear the screen to fade previous circles, and draw a new particle at each new coordinate
+   context.globalCompositeOperation = "source-over";
+   context.fillStyle = "rgba(0, 0, 0, 0.1)";
+   context.fillRect(0, 0, canvas.width, canvas.height);
+   context.globalCompositeOperation = "lighter";
+   for(var i = 0; i < particles.length; i++)
+   {
+     var p = particles[i];
+     context.beginPath();
+     context.arc(p.x, p.y, p.radius, 0, degreesToRadians(360), true);
+     context.fillStyle = p.color;
+     context.fill();
+     p.x += p.vx;
+     p.y += p.vy;
+     if(p.x < -1000) p.x = canvas.width+1000;
+     if(p.y < -1000) p.y = canvas.height+1000;
+     if(p.x > canvas.width+1000) p.x = -1000;
+     if(p.y > canvas.height+1000) p.y = -1000;
+     p.radius = 2;
+        }
+        
+
+ }
+
+
+function displayMessegeMexico() {
+  
+  canvas = document.getElementById("canvas");
+ 
+  ctx = canvas.getContext("2d");
+  ctx.font = "60px Comic Sans MS";
+  ctx.color = colorsMexico[Math.floor(Math.random()*colorsMexico.length)];
+
+  ctx.textAlign= "center";
+  ctx.fillText("Viva Mexico!",canvas.width/2, canvas.height/2);
+
+
+ 
+}
+
+
+//added event listeners to create fire works on mouse click
+ function initMexico (){
+   
+
+     canvas.onclick = function(event) {
+      makeParticlesMexico(event.clientX, event.clientY);
+    };
+   
+   
+
+      displayMessege();
+      
+
+ }
+
+
+////////////////////////////////////////////////////////////
+var colorsUsa = [
+          "red",
+          "red",
+          "red",
+          "blue",
+          "blue",
+          "blue",
+          "white",
+          "#99ccff",
+          "#003366",
+          "#ff0000"
+         
+   ];
+
+
+
+ function makeParticlesUsa() {
+  //create an array of particles for our animation
+  particles = [];
+  for(var i = 0; i < 30; i++)
+  {
+    particles.push(new ParticleUsa());
+  }
+ }
+
+
+ function ParticleUsa()
+ {
+   //the constructor for a single particle, with random starting x+y, velocity, color, and radius
+   //this.x = Math.random()*canvas.width;
+   //this.y = Math.random()*canvas.height;
+   
+//for this one to trigger on the mouse location all i had to do is add event.clientX and Y
+   this.x = event.clientX;
+   this.y = event.clientY;
+   this.vx = Math.random()*10-5;
+   this.vy = Math.random()*10-5;
+  this.color = colorsUsa[Math.floor(Math.random()*colorsUsa.length)];
+
+  displayMessegeUsa();
+
+ }
+
+
+ function moveParticlesUsa() {
+   //partially clear the screen to fade previous circles, and draw a new particle at each new coordinate
+   context.globalCompositeOperation = "source-over";
+   context.fillStyle = "rgba(0, 0, 0, 0.1)";
+   context.fillRect(0, 0, canvas.width, canvas.height);
+   context.globalCompositeOperation = "lighter";
+   for(var i = 0; i < particles.length; i++)
+   {
+     var p = particles[i];
+     context.beginPath();
+     context.arc(p.x, p.y, p.radius, 0, degreesToRadians(360), true);
+     context.fillStyle = p.color;
+     context.fill();
+     p.x += p.vx;
+     p.y += p.vy;
+     if(p.x < -1000) p.x = canvas.width+1000;
+     if(p.y < -1000) p.y = canvas.height+1000;
+     if(p.x > canvas.width+1000) p.x = -1000;
+     if(p.y > canvas.height+1000) p.y = -1000;
+     p.radius = 2;
+   }
+ }
+
+
+function displayMessegeUsa() {
+  
+  canvas = document.getElementById("canvas");
+ 
+  ctx = canvas.getContext("2d");
+  ctx.font = "60px Comic Sans MS";
+  ctx.color = colorsUsa[Math.floor(Math.random()*colorsUsa.length)];
+
+  ctx.textAlign= "center";
+  ctx.fillText("United We Stand",canvas.width/2, canvas.height/2);
+  
+
+ 
+}
+
+
+function initUsa (){
+   
+
+     canvas.onclick = function(event) {
+      makeParticlesUsa(event.clientX, event.clientY);
+    };
+   
+  // timer = setInterval(moveParticlesUsa, 20);
+   //timerRestart = setInterval(makeParticlesUsa, 5000);
+
+      displayMessege();
+
+ }
+
+////////////////////////////////////////////////////////////
+var colorsSpain = [
+         
+        
+          "yellow",
+          "red"       
+   ];
+
+function makeParticlesSpain() {
+  //create an array of particles for our animation
+  particles = [];
+  for(var i = 0; i < 30; i++)
+  {
+    particles.push(new ParticleSpain());
+  }
+ }
+
+
+ function ParticleSpain()
+ {
+   //the constructor for a single particle, with random starting x+y, velocity, color, and radius
+   //this.x = Math.random()*canvas.width;
+   //this.y = Math.random()*canvas.height;
+   
+//for this one to trigger on the mouse location all i had to do is add event.clientX and Y
+   this.x = event.clientX;
+   this.y = event.clientY;
+   this.vx = Math.random()*10-5;
+   this.vy = Math.random()*10-5;
+  this.color = colorsSpain[Math.floor(Math.random()*colorsSpain.length)];
+
+displayMessegeSpain();
+
+
+ }
+
+ function moveParticlesSpain() {
+   //partially clear the screen to fade previous circles, and draw a new particle at each new coordinate
+   context.globalCompositeOperation = "source-over";
+   context.fillStyle = "rgba(0, 0, 0, 0.1)";
+   context.fillRect(0, 0, canvas.width, canvas.height);
+   context.globalCompositeOperation = "lighter";
+   for(var i = 0; i < particles.length; i++)
+   {
+     var p = particles[i];
+     context.beginPath();
+     context.arc(p.x, p.y, p.radius, 0, degreesToRadians(360), true);
+     context.fillStyle = p.color;
+     context.fill();
+     p.x += p.vx;
+     p.y += p.vy;
+     if(p.x < -1000) p.x = canvas.width+1000;
+     if(p.y < -1000) p.y = canvas.height+1000;
+     if(p.x > canvas.width+1000) p.x = -1000;
+     if(p.y > canvas.height+1000) p.y = -1000;
+     p.radius = 2;
+   }
+ }
+
+
+
+function displayMessegeSpain() {
+  
+  canvas = document.getElementById("canvas");
+ 
+  ctx = canvas.getContext("2d");
+  ctx.font = "60px Comic Sans MS";
+  ctx.color = colorsSpain[Math.floor(Math.random()*colorsSpain.length)];
+
+  ctx.textAlign= "center";
+  ctx.fillText("VIVA ESPANA!",canvas.width/2, canvas.height/2);
+  
+
+ 
+}
+
+
+
+//added event listeners to create fire works on mouse click
+ function initSpain (){
+   
+
+     canvas.onclick = function(event) {
+      makeParticlesSpain(event.clientX, event.clientY);
+    };
+   
+  // timer = setInterval(moveParticlesFrance, 20);
+   //timerRestart = setInterval(makeParticlesFrance, 5000);
+
+      displayMessege();
+
+ }
+
+////////////////////////////////////////////////////////////
+var colorsBrazil = [
+          "yellow",
+          "yellow",
+          "yellow",
+          "white",
+          "green",
+          "blue",
+          "green",
+          "green"
+                
+   ];
+
+function makeParticlesBrazil() {
+  //create an array of particles for our animation
+  particles = [];
+  for(var i = 0; i < 30; i++)
+  {
+    particles.push(new ParticleBrazil());
+  }
+ }
+
+
+ function ParticleBrazil()
+ {
+   //the constructor for a single particle, with random starting x+y, velocity, color, and radius
+   //this.x = Math.random()*canvas.width;
+   //this.y = Math.random()*canvas.height;
+   
+//for this one to trigger on the mouse location all i had to do is add event.clientX and Y
+   this.x = event.clientX;
+   this.y = event.clientY;
+   this.vx = Math.random()*10-5;
+   this.vy = Math.random()*10-5;
+  this.color = colorsBrazil[Math.floor(Math.random()*colorsBrazil.length)];
+
+  displayMessegeBrazil();
+
+ }
+
+ function moveParticlesBrazil() {
+   //partially clear the screen to fade previous circles, and draw a new particle at each new coordinate
+   context.globalCompositeOperation = "source-over";
+   context.fillStyle = "rgba(0, 0, 0, 0.1)";
+   context.fillRect(0, 0, canvas.width, canvas.height);
+   context.globalCompositeOperation = "lighter";
+   for(var i = 0; i < particles.length; i++)
+   {
+     var p = particles[i];
+     context.beginPath();
+     context.arc(p.x, p.y, p.radius, 0, degreesToRadians(360), true);
+     context.fillStyle = p.color;
+     context.fill();
+     p.x += p.vx;
+     p.y += p.vy;
+     if(p.x < -1000) p.x = canvas.width+1000;
+     if(p.y < -1000) p.y = canvas.height+1000;
+     if(p.x > canvas.width+1000) p.x = -1000;
+     if(p.y > canvas.height+1000) p.y = -1000;
+     p.radius = 2;
+   }
+ }
+
+
+function displayMessegeBrazil() {
+  
+  canvas = document.getElementById("canvas");
+ 
+  ctx = canvas.getContext("2d");
+  ctx.font = "60px Comic Sans MS";
+  ctx.color = colorsBrazil[Math.floor(Math.random()*colorsBrazil.length)];
+
+  ctx.textAlign= "center";
+  ctx.fillText("Viva o Brasil!",canvas.width/2, canvas.height/2);
+  
+
+ 
+}
+
+
+//added event listeners to create fire works on mouse click
+ function initBrazil (){
+   
+
+     canvas.onclick = function(event) {
+      makeParticlesBrazil(event.clientX, event.clientY);
+    };
+   
+   //timer = setInterval(moveParticlesBrazil, 20);
+   //timerRestart = setInterval(makeParticlesBrazil, 5000);
+
+      displayMessege();
+
+ }
+
+////////////////////////////////////////////////////////////
+var colorsColombia = [
+         
+          "yellow",
+          "yellow",
+          "yellow",
+          "blue",
+          "red"       
+   ];
+
+function makeParticlesColombia() {
+  //create an array of particles for our animation
+  particles = [];
+  for(var i = 0; i < 30; i++)
+  {
+    particles.push(new ParticleColombia());
+  }
+ }
+
+
+ function ParticleColombia()
+ {
+   //the constructor for a single particle, with random starting x+y, velocity, color, and radius
+   //this.x = Math.random()*canvas.width;
+   //this.y = Math.random()*canvas.height;
+   
+//for this one to trigger on the mouse location all i had to do is add event.clientX and Y
+   this.x = event.clientX;
+   this.y = event.clientY;
+   this.vx = Math.random()*10-5;
+   this.vy = Math.random()*10-5;
+  this.color = colorsColombia[Math.floor(Math.random()*colorsColombia.length)];
+
+  displayMessegeColombia();
+
+ }
+
+ function moveParticlesColombia() {
+   //partially clear the screen to fade previous circles, and draw a new particle at each new coordinate
+   context.globalCompositeOperation = "source-over";
+   context.fillStyle = "rgba(0, 0, 0, 0.1)";
+   context.fillRect(0, 0, canvas.width, canvas.height);
+   context.globalCompositeOperation = "lighter";
+   for(var i = 0; i < particles.length; i++)
+   {
+     var p = particles[i];
+     context.beginPath();
+     context.arc(p.x, p.y, p.radius, 0, degreesToRadians(360), true);
+     context.fillStyle = p.color;
+     context.fill();
+     p.x += p.vx;
+     p.y += p.vy;
+     if(p.x < -1000) p.x = canvas.width+1000;
+     if(p.y < -1000) p.y = canvas.height+1000;
+     if(p.x > canvas.width+1000) p.x = -1000;
+     if(p.y > canvas.height+1000) p.y = -1000;
+     p.radius = 2;
+   }
+ }
+
+
+function displayMessegeColombia() {
+  
+  canvas = document.getElementById("canvas");
+ 
+  ctx = canvas.getContext("2d");
+  ctx.font = "60px Comic Sans MS";
+  ctx.color = colorsColombia[Math.floor(Math.random()*colorsColombia.length)];
+
+  ctx.textAlign= "center";
+  ctx.fillText("Libertad Y Orden!",canvas.width/2, canvas.height/2);
+  
+
+ 
+}
+
+
+
+//added event listeners to create fire works on mouse click
+ function initColombia (){
+   
+
+     canvas.onclick = function(event) {
+      makeParticlesColombia(event.clientX, event.clientY);
+    };
+   
+  // timer = setInterval(moveParticlesColombia, 20);
+  // timerRestart = setInterval(makeParticlesColombia, 5000);
+
+      displayMessege();
+
+ }
+
+////////////////////////////////////////////////////////////
+var colorsCanada = [
+         
+          
+          "white",
+          "red"       
+   ];
+
+function makeParticlesCanada() {
+  //create an array of particles for our animation
+  particles = [];
+  for(var i = 0; i < 30; i++)
+  {
+    particles.push(new ParticleCanada());
+  }
+ }
+
+
+ function ParticleCanada()
+ {
+   //the constructor for a single particle, with random starting x+y, velocity, color, and radius
+   //this.x = Math.random()*canvas.width;
+   //this.y = Math.random()*canvas.height;
+   
+//for this one to trigger on the mouse location all i had to do is add event.clientX and Y
+   this.x = event.clientX;
+   this.y = event.clientY;
+   this.vx = Math.random()*10-5;
+   this.vy = Math.random()*10-5;
+  this.color = colorsCanada[Math.floor(Math.random()*colorsCanada.length)];
+
+  displayMessegeCanada();
+
+ }
+
+ function moveParticlesCanada() {
+   //partially clear the screen to fade previous circles, and draw a new particle at each new coordinate
+   context.globalCompositeOperation = "source-over";
+   context.fillStyle = "rgba(0, 0, 0, 0.1)";
+   context.fillRect(0, 0, canvas.width, canvas.height);
+   context.globalCompositeOperation = "lighter";
+   for(var i = 0; i < particles.length; i++)
+   {
+     var p = particles[i];
+     context.beginPath();
+     context.arc(p.x, p.y, p.radius, 0, degreesToRadians(360), true);
+     context.fillStyle = p.color;
+     context.fill();
+     p.x += p.vx;
+     p.y += p.vy;
+     if(p.x < -1000) p.x = canvas.width+1000;
+     if(p.y < -1000) p.y = canvas.height+1000;
+     if(p.x > canvas.width+1000) p.x = -1000;
+     if(p.y > canvas.height+1000) p.y = -1000;
+     p.radius = 2;
+   }
+ }
+
+
+
+function displayMessegeCanada() {
+  
+  canvas = document.getElementById("canvas");
+ 
+  ctx = canvas.getContext("2d");
+  ctx.font = "60px Comic Sans MS";
+  ctx.color = colorsCanada[Math.floor(Math.random()*colorsCanada.length)];
+
+  ctx.textAlign= "center";
+  ctx.fillText("O CANADA!",canvas.width/2, canvas.height/2);
+  
+
+ 
+}
+
+
+
+//added event listeners to create fire works on mouse click
+ function initCanada (){
+   
+
+     canvas.onclick = function(event) {
+      makeParticlesCanada(event.clientX, event.clientY);
+    };
+   
+  // timer = setInterval(moveParticlesCanada, 20);
+  // timerRestart = setInterval(makeParticlesCanada, 5000);
+
+      displayMessege();
+
+
+ }
+
+////////////////////////////////////////////////////////////
+/*
+ function makeParticles() {
+	//create an array of particles for our animation
+	particles = [];
+	for(var i = 0; i < 30; i++)
+	{
+		particles.push(new Particle());
+	}
+ }
+
+
+ function Particle()
+ {
+	 //the constructor for a single particle, with random starting x+y, velocity, color, and radius
+	 //this.x = Math.random()*canvas.width;
+	 //this.y = Math.random()*canvas.height;
+	 
+//for this one to trigger on the mouse location all i had to do is add event.clientX and Y
+	 this.x = event.clientX;
+	 this.y = event.clientY;
+	 this.vx = Math.random()*10-5;
+	 this.vy = Math.random()*10-5;
+	this.color = colors[Math.floor(Math.random()*colors.length)];
+
+ }
+
+
+ function moveParticles() {
+	 //partially clear the screen to fade previous circles, and draw a new particle at each new coordinate
+	 context.globalCompositeOperation = "source-over";
+	 context.fillStyle = "rgba(0, 0, 0, 0.1)";
+	 context.fillRect(0, 0, canvas.width, canvas.height);
+	 context.globalCompositeOperation = "lighter";
+	 for(var i = 0; i < particles.length; i++)
+	 {
+		 var p = particles[i];
+		 context.beginPath();
+		 context.arc(p.x, p.y, p.radius, 0, degreesToRadians(360), true);
+		 context.fillStyle = p.color;
+		 context.fill();
+		 p.x += p.vx;
+		 p.y += p.vy;
+		 if(p.x < -1000) p.x = canvas.width+1000;
+		 if(p.y < -1000) p.y = canvas.height+1000;
+		 if(p.x > canvas.width+1000) p.x = -1000;
+		 if(p.y > canvas.height+1000) p.y = -1000;
+		 p.radius = 2;
+	 }
+ }
+ /*function clearScreen(color) {
+	 //clears the screen and fills with the color of choice
+	 context.clearRect(0, 0, canvas.width, canvas.height);
+	 context.fillStyle = color;
+	 context.fillRect(0, 0, canvas.width, canvas.height);
+ }
+*/
+
+
+function begining (color){
+
+
+	  context.clearRect(0, 0, canvas.width, canvas.height);
+		context.fillStyle = gradient;
+		context.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+//this is the press spcace bar funtion
+window.addEventListener("keydown", checkKeyPressed, false);
+ 
+    function checkKeyPressed(e) {
+          if (e.keyCode == "32") {
+                begining();
+                //i could use a switch
+            myButtones();
+            displayMessege();
+         }
+    }
+
+function myButtones(){
+   document.getElementById("mexico").addEventListener("click", initMexico);
+
+timer = setInterval(moveParticlesMexico, 20);
+   timerRestart = setInterval(makeParticlesMexico, 5000);
+   document.getElementById("unitedStates").addEventListener("click", initUsa);
+
+   document.getElementById("spain").addEventListener("click", initSpain);
+
+   document.getElementById("colombia").addEventListener("click", initColombia);
+
+   document.getElementById("brazil").addEventListener("click", initBrazil);
+
+   document.getElementById("canada").addEventListener("click", initCanada);
+
+}
+
+
+
+//black screen messege 
+function displayMessege() {
+
+  canvas = document.getElementById("canvas");
+ 
+  ctx = canvas.getContext("2d");
+  ctx.font = "15px Comic Sans MS";
+  ctx.fillStyle= "rgba(255,255,204,0.08)";
+  ctx.textAlign= "center";
+  ctx.fillText("Click on screen",canvas.width/2, canvas.height/20);
+  setTimeout(displayMessege,20)
+
+
+}
+
+/*
+function bouncingText(){
+     
+     
+var c = document.getElementById("canvas");
+var ctx = c.getContext("2d");
+
+ 	var step = 10;
+ 	var steps = 50;
+ 	var delay = 20;
+ 	var canvas;
+ 	var ctx;
+/*
+ctx.font = "20px Georgia";
+ctx.fillStyle= "red";
+ctx.fillText("hola!", 30, 40);
+
+ctx.font = "30px Verdana";
+
+// Create gradient
+
+// Fill with gradient
+ctx.fillStyle = gradient;
+ctx.fillText("Welcome!", 10, 90);
+}
+*/
+
+
+
+ function TextSmallToBig() {
+    //this is the text for WELCOME
+
+            step++;
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.save();
+  
+            context.font = step + "pt Verdana";
+            var gradient = context.createLinearGradient(0, 0, canvas.width, 0);
+
+				gradient.addColorStop("0.1", "white");
+				gradient.addColorStop("0.2", "blue");
+				gradient.addColorStop("0.4", "green");
+				gradient.addColorStop("0.5", "red");
+				gradient.addColorStop("0.6", "green");
+				gradient.addColorStop("0.8", "blue");
+				gradient.addColorStop("0.9", "white");
+
+            context.fillStyle= gradient;
+            context.textAlign= "center";
+            context.fillText("WELCOME!!!", canvas.width/2, canvas.height/2);
+            context.restore();
+            if (step < steps)
+                var t = setTimeout('TextSmallToBig()', 20);
+
+
+            //this is the text for space bar event
+   context.font = "30px Georgia";
+   context.fillStyle="white";
+   context.fillText("Press Space Bar to Begin!", canvas.width/2-50,canvas.height/1.01);
+   
+
+       //this is the text for introduction
+       //ALSO I COULD NOT FIGURE OUT HOW TO CREATE A BREAK SO I DECODEDE TO ADD A NEW PARAGRAPH WITH EVERY SENTENCE
+        context.fillStyle="black";
+        context.font = "20px Georgia";
+        context.fillText("Hello there everybody!", canvas.width/14,canvas.height/12);
+
+        context.fillStyle="black";
+        context.font = "20px Georgia";
+        context.fillText("My name is Jose Medina", canvas.width/18,canvas.height/8);
+        
+        context.fillStyle="black";
+        context.font = "20px Georgia";
+        context.fillText("This is an interactive experience", canvas.width/18,canvas.height/6);
+ 
+        context.fillStyle="black";
+        context.font = "20px Georgia";
+        context.fillText("created using Javascript and HTML5 canvas", canvas.width/18,canvas.height/5);
+
+
+
+        //this is the intro paragraph located on bottom right of the screen
+        context.fillStyle="black";
+        context.font = "20px Georgia";
+        context.fillText("Here you will be able to experience, to some degree what it", canvas.width/1.8,canvas.height/1.7);
+
+        context.fillStyle="black";
+        context.font = "20px Georgia";
+        context.fillText("feels like to celebrate Independence day in some countries around", canvas.width/1.9,canvas.height/1.6);
+        
+        context.fillStyle="black";
+        context.font = "20px Georgia";
+        context.fillText("the world. You will also see typical patriotic phrases corresponding  ", canvas.width/1.9,canvas.height/1.5);
+ 
+        context.fillStyle="black";
+        context.font = "20px Georgia";
+        context.fillText("to which ever country you have clicked on. ", canvas.width/1.9,canvas.height/1.4);
+        context.fillStyle="green";
+        context.font = "30px Georgia";
+        context.fillText("Thank you for visiting and enjoy!!", canvas.width/1.6,canvas.height/1.3);
+
+
+
+        //context.width= canvas.width;
+        //context.height= canvas.height;
+
+        }
+
+
+
+//helper functions
+ function degreesToRadians(degrees) {
+   //converts from degrees to radians and returns
+   return (degrees * Math.PI)/180;
+ }
+
+
+//addded function to resize the canvas depending on the screen
+ function resizeCanvas() {
+        canvas.width = window.innerWidth- 20;
+        canvas.height = window.innerHeight- 120;
+        
+
+    }
+
+
+/////////////////////////////////
+//this is the handler of everything
+window.onload = function() {
+      canvas = document.getElementById('canvas');
+      context = canvas.getContext('2d');
+   
+      window.addEventListener('resize', resizeCanvas, false);
+      window.addEventListener('orientationchange', resizeCanvas, false);
+    
+
+      resizeCanvas();
+     
+    
+      //context.textBaseline="middle";
+ 
+      TextSmallToBig();
+    
+      //var startButton = document.getElementById("startButton");
+     
+
+}
+
+
+/*
+//scrolling text
+function RunTextLeftToRight() {
+            step++;
+            ctx.clearRect(0, 0, can.width, can.height);
+            ctx.save();
+            ctx.translate(step, can.height / 2);
+            ctx.fillText("Welcome", 0, 0);
+            ctx.restore();
+            if (step == steps)
+                step = 0;
+            if (step < steps)
+                var t = setTimeout('RunTextLeftToRight()', delay);
+        }
+
+*/
+
+
+
+
+
+
+/*
+var rgbstep = 50;
+
+ function fading() {
+            canvas = document.getElementById("canvas");
+            ctc= canvas.getContext("2d");
+            ctc.fillStyle = "blue";
+            ctc.font = "40pt Helvetica";
+            ctc.textAlign = "center";
+            ctc.textBaseline = "middle";
+                     Textfadeup();        }
+ 
+          function Textfadeup() {
+            rgbstep++;
+            ctc.clearRect(0, 0, canvas.width, canvas.height);
+            ctc.fillStyle = "rgb(" + rgbstep + "," + rgbstep + "," + rgbstep + ")"
+            ctc.fillText("WELCOME", 150, 100);
+            if (rgbstep < 255)
+                var t = setTimeout('Textfadeup()', 10);
+            if (rgbstep == 255) {
+                Textfadedown();
+            }
+        }
+        function Textfadedown() {
+rgbstep=rgbstep-1;
+            ctc.clearRect(0, 0, canvas.width, canvas.height);
+            ctc.fillStyle = "rgb(" + rgbstep + "," + rgbstep + "," + rgbstep + ")"
+            ctc.fillText("WELCOME", 150, 100);
+            if (rgbstep > 80)
+                var t = setTimeout('Textfadedown()', 10);
+            if (rgbstep == 80) {
+                Textfadeup();
+            }
+        }  
+ 
+*/
+
+</script>
+
+<body>
+	<canvas id="canvas" width="1280" height="720"></canvas>
+
+ <form>
+  <input type="button" id="unitedStates"  
+  value="      USA      ">
+   <input type="button" id="mexico"  
+  value="     MEXICO    ">
+    <input type="button" id="spain" 
+  value="     SPAIN     ">
+    <input type="button" id="brazil"  
+  value="     BRAZIL    ">
+     <input type="button" id="colombia" 
+  value="    COLOMBIA   ">
+      <input type="button" id="canada" 
+  value="     CANADA    ">
+ 
+
+
+ </form>
+
+ <p> Fireworks Around the World</p>
+
+
+
+</body>
+</html>
